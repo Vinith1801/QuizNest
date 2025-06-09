@@ -8,18 +8,20 @@ const getCategories = (req, res) => {
 };
 
 const getQuestions = (req, res) => {
-  const categoryId = req.params.id;
+  const categoryId = req.query.category;
+  if (!categoryId) return res.status(400).json({ msg: "Category ID is required" });
 
   QuizModel.getQuestionsByCategory(categoryId, (err, results) => {
     if (err) return res.status(500).json({ msg: "Error fetching questions" });
 
-    // Optionally parse options from JSON string to array
-    const formatted = results.map((q) => ({
-      ...q,
+    // Return questions without answers to client
+    const questions = results.map(q => ({
+      id: q.id,
+      question: q.question,
       options: JSON.parse(q.options),
     }));
 
-    res.json(formatted);
+    res.json(questions);
   });
 };
 
