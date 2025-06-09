@@ -1,4 +1,4 @@
-# 🧠 WaitScape Quiz App – Backend
+# 🧠 QuizNest – Backend
 
 > RESTful API for a modern quiz web app built with **Node.js**, **Express**, **MySQL**, and **JWT authentication**.
 
