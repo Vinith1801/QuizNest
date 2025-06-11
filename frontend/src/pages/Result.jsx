@@ -1,10 +1,9 @@
-// src/pages/Result.jsx
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Result = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { score, total, timeTaken } = location.state || {};
+  const { score, total, timeTaken, categoryId } = location.state || {};
 
   if (score === undefined) {
     return (
@@ -36,12 +35,24 @@ const Result = () => {
             ? "Good effort! 👍"
             : "Keep practicing! 💪"}
         </p>
-        <div className="mt-6 flex justify-center gap-4">
+        <div className="mt-6 flex flex-wrap justify-center gap-4">
+          <button
+            onClick={() => navigate(`/quiz/${categoryId}`)}
+            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+          >
+            Retake Quiz
+          </button>
           <button
             onClick={() => navigate("/categories")}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Try Another Quiz
+          </button>
+          <button
+            onClick={() => navigate(`/leaderboard/${categoryId}`)}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Leaderboard
           </button>
           <button
             onClick={() => navigate("/")}
