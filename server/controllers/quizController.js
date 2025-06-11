@@ -18,6 +18,7 @@ const getQuestions = (req, res) => {
       id: q.id,
       question: q.question,
       options: JSON.parse(q.options),
+      answer: q.answer
     }));
 
     res.json(questions);

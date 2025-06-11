@@ -1,32 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./auth/AuthContext";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
+import Category from "./pages/Category";
+import Quiz from "./pages/Quiz";
+import Result from "./pages/Result";
+import Home from "./pages/Home";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user } = useAuth();
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <div className="flex items-center gap-4 mb-8">
-          <a href="https://vitejs.dev" target="_blank" rel="noopener noreferrer">
-            <img src={viteLogo} className="logo" alt="Vite logo" />
-          </a>
-          <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-        </div>
-        <h1 className="text-3xl font-bold mb-4">Vite + React + Tailwind CSS</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)} className="btn">
-            count is {count}
-          </button>
-        </div>
-        <p className="mt-4 text-gray-600">Click the button to increment the count.</p>
-      </div>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<Home/>} />
+      <Route path="/signin" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/profile"
+        element={user ? <Profile /> : <Navigate to="/signin" />}
+      />
+      <Route path="/categories" element={<Category />} />
+      <Route path="/quiz/:id" element={<Quiz />} />
+      <Route path="/result" element={<Result />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
