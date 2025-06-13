@@ -13,14 +13,18 @@ const Profile = () => {
   if (!user) return null;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl text-center space-y-4">
-      <h1 className="text-3xl font-bold text-blue-600">👋 Hey, {user.username}!</h1>
-      
-      <div className="text-left mt-6 bg-gray-50 p-4 rounded-lg shadow-inner">
-        <p className="text-gray-600 mb-2"><strong>User ID:</strong> {user.id}</p>
-        <p className="text-gray-600 mb-2"><strong>User Name:</strong> {user.username}</p>
-        {/* <p className="text-gray-600"><strong>Account Created:</strong> [placeholder]</p> */}
-        {/* Optional: Add quiz stats if you track them */}
+    <div className="max-w-md mx-auto mt-20 px-6 py-8 bg-white/70 backdrop-blur-md shadow-lg rounded-3xl text-center space-y-6">
+      <h1 className="text-4xl font-extrabold text-blue-700 tracking-tight">👋 Hello, {user.username}</h1>
+
+      <div className="text-left bg-white/60 rounded-xl p-4 shadow-inner border border-gray-200">
+        <p className="text-gray-700 mb-3">
+          <span className="font-semibold">🆔 User ID:</span> {user.id}
+        </p>
+        <p className="text-gray-700">
+          <span className="font-semibold">🙍 Username:</span> {user.username}
+        </p>
+        {/* Future addition:
+        <p className="text-gray-700"><span className="font-semibold">📅 Joined:</span> {user.createdAt}</p> */}
       </div>
 
       <button
@@ -28,9 +32,9 @@ const Profile = () => {
           logout();
           navigate("/signin");
         }}
-        className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full mt-4"
+        className="mt-6 bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white px-6 py-2 rounded-full shadow-lg transition duration-200 ease-in-out"
       >
-        Logout
+        🚪 Logout
       </button>
     </div>
   );

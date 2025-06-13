@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,34 +13,65 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  try {
-    await login(formData);
-    navigate("/profile");
-  } catch (err) {
-    setError(err.response?.data?.message || "Login failed");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await login(formData);
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.msg || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="p-4 max-w-sm mx-auto">
-      <h1 className="text-xl font-bold mb-4">Login</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input type="text" name="username" placeholder="Username" className="w-full p-2 border rounded" onChange={handleChange} />
-        <input type="password" name="password" placeholder="Password" className="w-full p-2 border rounded" onChange={handleChange} />
-        {error && <p className="text-red-500">{error}</p>}
-        <button type="submit"
-        className="w-full bg-blue-600 text-white p-2 rounded" disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <p className="mt-2 text-sm">
-        Don’t have an account? <Link to="/signup" className="text-blue-500">Signup</Link>
-      </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">
+      <div className="w-full max-w-sm p-8 bg-white/80 backdrop-blur-md shadow-xl rounded-2xl">
+        <h1 className="text-2xl font-extrabold text-blue-700 text-center mb-6">🔐 Login to QuizNest</h1>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={handleChange}
+            required
+          />
+
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 p-2 rounded text-center">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold shadow"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <p className="mt-4 text-sm text-center text-gray-700">
+          Don’t have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Sign up here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

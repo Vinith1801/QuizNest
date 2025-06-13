@@ -1,4 +1,3 @@
-// src/pages/History.jsx
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import { useAuth } from "../auth/AuthContext";
@@ -25,37 +24,64 @@ const History = () => {
     fetchHistory();
   }, [token]);
 
-  if (loading) return <div className="text-center mt-10">Loading history...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[60vh] text-blue-600 font-semibold text-xl">
+        ⏳ Loading your quiz history...
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white shadow rounded">
-      <h1 className="text-2xl font-bold mb-6 text-center">🕓 My Quiz History</h1>
+    <div className="max-w-5xl mx-auto mt-20 px-4">
+      <h1 className="text-3xl font-bold text-center text-blue-700 mb-8">🕓 My Quiz History</h1>
 
       {history.length === 0 ? (
-        <p className="text-center text-gray-600">You haven’t completed any quizzes yet.</p>
+        <p className="text-center text-gray-600 text-lg">You haven’t completed any quizzes yet.</p>
       ) : (
-        <table className="w-full table-auto border-collapse">
-          <thead>
-            <tr>
-              <th className="border-b p-2">#</th>
-              <th className="border-b p-2">Category</th>
-              <th className="border-b p-2">Score</th>
-              <th className="border-b p-2">Time Taken (s)</th>
-              <th className="border-b p-2">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {history.map((entry, index) => (
-              <tr key={index}>
-                <td className="p-2 text-center">{index + 1}</td>
-                <td className="p-2">{entry.category}</td>
-                <td className="p-2">{entry.score} / {entry.total_questions}</td>
-                <td className="p-2">{entry.time_taken}</td>
-                <td className="p-2">{new Date(entry.created_at).toLocaleString()}</td>
+        <div className="overflow-x-auto bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-xl">
+          <table className="w-full min-w-[600px] text-sm sm:text-base">
+            <thead>
+              <tr className="text-blue-700 border-b-2 border-blue-300 text-left">
+                <th className="py-3">#</th>
+                <th className="py-3">Category</th>
+                <th className="py-3">Score</th>
+                <th className="py-3">Time Taken</th>
+                <th className="py-3">Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="text-gray-700">
+              {history.map((entry, index) => {
+                const percentage = (entry.score / entry.total_questions) * 100;
+                const scoreColor =
+                  percentage >= 80
+                    ? "bg-green-100 text-green-700"
+                    : percentage >= 50
+                    ? "bg-yellow-100 text-yellow-700"
+                    : "bg-red-100 text-red-700";
+
+                return (
+                  <tr key={index} className="hover:bg-blue-50 transition">
+                    <td className="py-3 px-2 font-medium">{index + 1}</td>
+                    <td className="py-3 px-2">{entry.category}</td>
+                    <td className="py-3 px-2">
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${scoreColor}`}>
+                        {entry.score} / {entry.total_questions}
+                      </span>
+                    </td>
+                    <td className="py-3 px-2">{entry.time_taken}s</td>
+                    <td className="py-3 px-2">
+                      {new Date(entry.created_at).toLocaleString(undefined, {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

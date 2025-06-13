@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../api/axios";
 import { useAuth } from "../auth/AuthContext";
+import Loader from "../components/Loader";
 
 const Quiz = () => {
   const { id } = useParams();
@@ -13,8 +14,8 @@ const Quiz = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [startTime, setStartTime] = useState(null); // Total quiz timer
-  const [timeLeft, setTimeLeft] = useState(30);     // Per-question timer
+  const [startTime, setStartTime] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(30);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -32,15 +33,13 @@ const Quiz = () => {
     fetchQuestions();
   }, [id, token]);
 
-  // ⏱ Countdown timer for each question
   useEffect(() => {
-    setTimeLeft(30); // Reset on question change
-
+    setTimeLeft(30);
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
-          handleNext(); // Auto next if time runs out
+          handleNext();
           return 0;
         }
         return prev - 1;
@@ -50,9 +49,7 @@ const Quiz = () => {
     return () => clearInterval(interval);
   }, [currentIndex]);
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-  };
+  const handleOptionClick = (option) => setSelectedOption(option);
 
   const handleNext = () => {
     const currentQuestion = questions[currentIndex];
@@ -80,9 +77,7 @@ const Quiz = () => {
           timeTaken,
           totalQuestions: questions.length,
         },
-        {
-          headers: { Authorization: token },
-        }
+        { headers: { Authorization: token } }
       );
 
       navigate("/result", {
@@ -93,55 +88,69 @@ const Quiz = () => {
     }
   };
 
-  if (!questions.length) return <div className="text-center mt-10">Loading...</div>;
+  if (!questions.length) return <Loader />;
 
   const currentQuestion = questions[currentIndex];
 
   return (
-  <div className="max-w-2xl mx-auto p-6 bg-white shadow-xl rounded-2xl">
-  <div className="flex justify-between items-center mb-4">
-    <h2 className="text-xl font-bold text-blue-700">
-      Question {currentIndex + 1} / {questions.length}
-    </h2>
-    <div className="text-sm text-red-500 font-semibold">
-      ⏳ {timeLeft}s left
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-purple-100 py-10 px-4">
+      <div className="w-full max-w-2xl bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-2xl">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-indigo-700">
+            ❓ Question {currentIndex + 1} of {questions.length}
+          </h2>
+          <div className="text-red-600 font-bold text-sm sm:text-base">
+            ⏱ {timeLeft}s
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-8">
+          <div
+            className="h-2 bg-blue-500 transition-all duration-500"
+            style={{
+              width: `${((currentIndex + 1) / questions.length) * 100}%`,
+            }}
+          ></div>
+        </div>
+
+        {/* Question */}
+        <p className="text-lg sm:text-xl font-medium text-gray-800 mb-6">
+          {currentQuestion.question}
+        </p>
+
+        {/* Options */}
+        <div className="grid gap-4">
+          {currentQuestion.options.map((option, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleOptionClick(option)}
+              className={`w-full py-3 px-5 rounded-xl border text-left font-medium transition transform duration-200 ${
+                selectedOption === option
+                  ? "bg-blue-600 text-white border-blue-700 shadow-md scale-105"
+                  : "bg-white hover:bg-blue-50 text-gray-800 border-gray-300"
+              }`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+
+        {/* Next / Submit Button */}
+        <button
+          onClick={handleNext}
+          disabled={selectedOption === null}
+          className={`mt-8 w-full py-3 rounded-xl text-white font-semibold shadow-md transition duration-300 ${
+            selectedOption === null
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }`}
+        >
+          {currentIndex + 1 === questions.length ? "🎯 Submit Quiz" : "➡️ Next Question"}
+        </button>
+      </div>
     </div>
-    <div className="w-full h-2 bg-gray-200 rounded-full mb-4">
-  <div
-    className="h-2 bg-blue-600 rounded-full transition-all duration-300"
-    style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
-  ></div>
-</div>
-
-  </div>
-
-  <p className="text-lg font-medium text-gray-800 mb-6">{currentQuestion.question}</p>
-
-  <div className="grid gap-4">
-    {currentQuestion.options.map((option, idx) => (
-      <button
-        key={idx}
-        onClick={() => handleOptionClick(option)}
-        className={`w-full py-3 px-4 rounded-lg border transition-all duration-150 ${
-          selectedOption === option
-            ? "bg-blue-600 text-white border-blue-700"
-            : "bg-gray-50 hover:bg-gray-100 border-gray-300 text-gray-800"
-        }`}
-      >
-        {option}
-      </button>
-    ))}
-  </div>
-
-  <button
-    onClick={handleNext}
-    className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
-    disabled={selectedOption === null}
-  >
-    {currentIndex + 1 === questions.length ? "Submit Quiz" : "Next Question"}
-  </button>
-</div>
-
   );
 };
 

@@ -6,7 +6,7 @@ const signup = (req, res) => {
   const { username, password } = req.body;
 
   UserModel.findUserByUsername(username, async (err, result) => {
-    if (result.length > 0) return res.status(400).json({ msg: "Username already exists" });
+    if (result.length > 0) return res.status(400).json({ msg: "Username already exists! Please choose another one" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     UserModel.createUser(username, hashedPassword, (err, result) => {

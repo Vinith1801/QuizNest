@@ -7,10 +7,10 @@ const Result = () => {
 
   if (score === undefined) {
     return (
-      <div className="text-center mt-10">
-        <p className="text-lg">No result data found. Please take a quiz first.</p>
+      <div className="text-center mt-20">
+        <p className="text-xl text-gray-700">No result data found. Please take a quiz first.</p>
         <button
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+          className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow"
           onClick={() => navigate("/")}
         >
           Go Home
@@ -21,44 +21,83 @@ const Result = () => {
 
   const percentage = Math.round((score / total) * 100);
 
+  // 🎯 Dynamic Emoji Feedback
+  const getMessage = () => {
+    if (percentage >= 80) return "🏆 Excellent!";
+    if (percentage >= 50) return "👍 Good effort!";
+    return "💪 Keep practicing!";
+  };
+
   return (
-    <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow rounded">
-      <h1 className="text-2xl font-bold mb-4 text-center">🎉 Quiz Completed!</h1>
-      <div className="text-center text-lg">
-        <p className="mb-2">✅ Score: <strong>{score}</strong> out of <strong>{total}</strong></p>
-        <p className="mb-2">📊 Percentage: <strong>{percentage}%</strong></p>
-        <p className="mb-4">⏱️ Time Taken: <strong>{timeTaken}s</strong></p>
-        <p className="text-green-600 font-semibold">
-          {percentage >= 80
-            ? "Excellent! 🏆"
-            : percentage >= 50
-            ? "Good effort! 👍"
-            : "Keep practicing! 💪"}
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-4">
+    <div className="flex justify-center items-center min-h-screen px-4 bg-gradient-to-br from-green-50 to-blue-100">
+      <div className="w-full max-w-xl bg-white/80 backdrop-blur-lg p-8 rounded-3xl shadow-2xl text-center">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-700 mb-6">
+          🎉 Quiz Completed!
+        </h1>
+
+        {/* 🧭 Score Circle */}
+        <div className="relative w-40 h-40 mx-auto mb-6">
+          <svg className="transform -rotate-90" width="160" height="160">
+            <circle
+              cx="80"
+              cy="80"
+              r="70"
+              stroke="#e5e7eb"
+              strokeWidth="15"
+              fill="transparent"
+            />
+            <circle
+              cx="80"
+              cy="80"
+              r="70"
+              stroke="#3b82f6"
+              strokeWidth="15"
+              fill="transparent"
+              strokeDasharray="440"
+              strokeDashoffset={440 - (440 * percentage) / 100}
+              strokeLinecap="round"
+              style={{ transition: "stroke-dashoffset 1s ease-out" }}
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-2xl font-bold text-blue-700">{percentage}%</span>
+          </div>
+        </div>
+
+        {/* 📝 Stats */}
+        <div className="text-lg text-gray-800 space-y-2 mb-4">
+          <p>✅ <strong>{score}</strong> out of <strong>{total}</strong> questions</p>
+          <p>⏱️ Time Taken: <strong>{timeTaken}s</strong></p>
+        </div>
+
+        {/* 🧠 Feedback */}
+        <p className="text-xl font-semibold text-green-600 mb-8">{getMessage()}</p>
+
+        {/* 🎮 Action Buttons */}
+        <div className="grid sm:grid-cols-2 gap-4">
           <button
             onClick={() => navigate(`/quiz/${categoryId}`)}
-            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+            className="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl font-medium shadow"
           >
-            Retake Quiz
+            🔁 Retake Quiz
           </button>
           <button
             onClick={() => navigate("/categories")}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-xl font-medium shadow"
           >
-            Try Another Quiz
+            📚 New Category
           </button>
           <button
             onClick={() => navigate(`/leaderboard/${categoryId}`)}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-medium shadow"
           >
-            Leaderboard
+            🏅 Leaderboard
           </button>
           <button
             onClick={() => navigate("/")}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            className="bg-gray-500 hover:bg-gray-600 text-white py-3 rounded-xl font-medium shadow"
           >
-            Home
+            🏠 Home
           </button>
         </div>
       </div>
