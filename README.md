@@ -1,133 +1,141 @@
-# 🧠 QuizNest – Backend
+# 🎯 QuizNest
 
-> RESTful API for a modern quiz web app built with **Node.js**, **Express**, **MySQL**, and **JWT authentication**.
+**QuizNest** is a full-stack quiz application built with React, Node.js, Express, and MySQL. Designed with a sleek modern UI using TailwindCSS and Framer Motion, QuizNest offers a seamless and responsive user experience for testing knowledge across various categories.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Features
 
+- 🔐 User Authentication (JWT-based)
+- 🧠 Quiz Categories with Randomized Questions
+- 📊 Real-time Leaderboard
+- 🗂️ History of Past Attempts
+- ⏱️ Timer-based Quiz System
+- 🌙 Splash and Loading Screens
+- 🧭 Protected Routes and User Profiles
+- ⚙️ RESTful API Architecture
+
+---
+
+## 🧩 Tech Stack
+
+### Frontend
+- [React.js](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/) (for transitions)
+- Context API for State Management
+- Axios for API Communication
+
+### Backend
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [MySQL](https://www.mysql.com/)
+- JWT for Authentication
+
+---
+
+## 🗂️ Project Structure
+
+```text
+QuizNest/
+├── database/
+│   └── quiznest.sql            # SQL schema and seed data
+├── frontend/                   # React frontend
+│   ├── public/
+│   └── src/
+│       ├── api/                # Axios config
+│       ├── auth/               # Auth context and route guards
+│       ├── components/         # Reusable UI components
+│       └── pages/              # App pages (Quiz, Login, History, etc.)
+├── server/                     # Node.js backend
+│   ├── config/                 # DB connection
+│   ├── controllers/            # Logic for auth & quiz
+│   ├── middleware/             # Auth middleware
+│   ├── models/                 # Database models
+│   ├── routes/                 # API routes
+│   └── utils/                  # Token utilities
+````
+
+---
+
+---
+
+## 🛠️ Setup Instructions
+
+### Prerequisites
+
+* Node.js ≥ 18.x
+* MySQL Server
+* Vite (installed globally or via `npm create vite@latest`)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/QuizNest.git
+cd QuizNest
 ```
-├── config/
-│   └── db.js               # MySQL connection setup
-│
-├── controllers/
-│   ├── authController.js   # Signup/Login logic
-│   └── quizController.js   # Quiz & Score logic
-│
-├── middleware/
-│   └── authMiddleware.js   # JWT auth verification
-│
-├── models/
-│   ├── UserModel.js        # User DB logic
-│   └── QuizModel.js        # Quiz DB logic
-│
-├── routes/
-│   ├── authRoutes.js       # /api/auth
-│   └── quizRoutes.js       # /api/quiz
-│
-├── utils/
-│   └── generateToken.js    # JWT generator
-│
-├── .env
-├── .gitignore
-├── package.json
-└── server.js               # App entry point
-```
 
----
+### 2. Setup MySQL Database
 
-## ⚙️ Tech Stack
+* Import `database/quiznest.sql` into your MySQL server.
+* Create a `.env` file in `/server` and configure:
 
-* **Backend**: Node.js + Express
-* **Database**: MySQL
-* **Auth**: JWT (token-based)
-* **Password Security**: bcryptjs
-* **API Structure**: RESTful
-
----
-
-## 🔐 Authentication
-
-Implemented using JSON Web Tokens.
-
-* `POST /api/auth/signup`: Register with unique username & password.
-* `POST /api/auth/login`: Receive JWT on success.
-* Protected routes require header:
-  `Authorization: <token>`
-
----
-
-## 📋 API Endpoints
-
-### 🔐 Auth
-
-| Method | Endpoint           | Protected | Description           |
-| ------ | ------------------ | --------- | --------------------- |
-| POST   | `/api/auth/signup` | ❌         | Register new user     |
-| POST   | `/api/auth/login`  | ❌         | Login & get JWT token |
-
----
-
-### 📚 Quiz
-
-| Method | Endpoint                    | Protected | Description                  |
-| ------ | --------------------------- | --------- | ---------------------------- |
-| GET    | `/api/quiz/categories`      | ❌         | List all quiz categories     |
-| GET    | `/api/quiz/questions/:id`   | ✅         | Get questions by category ID |
-| POST   | `/api/quiz/submit-score`    | ✅         | Submit quiz score            |
-| GET    | `/api/quiz/leaderboard/:id` | ❌         | Top 10 scores in a category  |
-
----
-
-## 🧪 Sample `.env`
-
-```
+```env
 PORT=5000
 DB_HOST=localhost
 DB_USER=root
-DB_PASS=yourpassword
-DB_NAME=quiz_app
+DB_PASSWORD=yourpassword
+DB_NAME=quiznest
 JWT_SECRET=your_jwt_secret
 ```
 
----
-
-## 🧠 Features Summary
-
-* ✅ User Registration & Login with JWT
-* ✅ Quiz Categories & Questions (protected)
-* ✅ Score submission (linked to user + category)
-* ✅ Leaderboard per category
-* ✅ Clean MVC folder structure
-* ✅ Modular route + controller + model separation
-
----
-
-## 🧱 Database Tables
-provided in the repo - dir name - database
-
----
-
-## 🚀 Getting Started
+### 3. Run the Backend
 
 ```bash
-# 1. Install dependencies
+cd server
 npm install
+npm run dev
+```
 
-# 2. Set up .env
-# 3. Run the server
-npm start
+### 4. Run the Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
 ---
 
-## 📦 Future Enhancements
+## 📡 API Endpoints
 
-* [ ] Add user profile routes (total score, games played)
-* [ ] Admin route to manage questions/categories
-* [ ] Email-based password reset (with nodemailer)
-* [ ] Tests with Jest or Supertest
+> These endpoints are located in `routes/` and controlled via `controllers/`.
+
+### Auth Routes
+
+* `POST /api/auth/register`
+* `POST /api/auth/login`
+* `GET /api/auth/profile`
+
+### Quiz Routes
+
+* `GET /api/quiz/categories`
+* `POST /api/quiz/submit-score`
+* `GET /api/quiz/leaderboard`
+* `GET /api/quiz/history`
 
 ---
 
-Let me know if you want the frontend README to match this or need a badge/image-ready version!
+
+## 🙌 Acknowledgements
+
+* OpenAI ChatGPT for brainstorming ideas
+* Tailwind UI for design inspiration
+---
+
+## 👨‍💻 Author
+
+Made with 💡 by [Vinith](https://github.com/Vinith1801)
+
+```
