@@ -5,3 +5,12 @@ body {
   font-family: 'Inter', sans-serif;
   @apply bg-gray-50 text-gray-800;
 }
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.animate-blink {
+  animation: blink 1s infinite;
+}

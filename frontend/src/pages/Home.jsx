@@ -1,8 +1,10 @@
 // src/pages/Home.jsx
 import { Link } from "react-router-dom";
+import PageWrapper from "../components/PageWrapper";
 
 const Home = () => {
   return (
+    <PageWrapper>
     <div className="relative min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-gradient-to-br from-indigo-100 via-blue-100 to-purple-200 overflow-hidden">
       
       {/* Decorative Shapes */}
@@ -26,6 +28,7 @@ const Home = () => {
         </Link>
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

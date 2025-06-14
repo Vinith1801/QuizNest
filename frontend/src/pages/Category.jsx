@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Loader from "../components/Loader";
+import PageWrapper from "../components/PageWrapper";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -26,6 +27,7 @@ const Category = () => {
   if (loading) return <Loader />;
 
   return (
+    <PageWrapper>
     <div className="max-w-5xl mx-auto px-4 mt-20">
       <h1 className="text-3xl font-bold text-center text-blue-700 mb-10">
         📚 Choose a Quiz Category
@@ -39,11 +41,17 @@ const Category = () => {
             className="bg-white/70 backdrop-blur-md shadow-md rounded-2xl p-6 hover:bg-blue-100 transition-all border border-blue-100 text-blue-800 font-semibold text-lg hover:scale-105 active:scale-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             <div className="text-3xl mb-2">🧩</div>
+             {/* <img
+        src={cat.image_url}
+        alt={`${cat.name} icon`}
+        className="w-16 h-16 mb-3 object-contain rounded-xl shadow-sm"
+      /> */}
             {cat.name}
           </button>
         ))}
       </div>
     </div>
+    </PageWrapper>
   );
 };
 

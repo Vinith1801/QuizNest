@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Login = () => {
   const { login } = useAuth();
@@ -8,6 +9,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showSplash, setShowSplash] = useState(false); // 👈 New splash state
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,16 +17,21 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
     try {
       await login(formData);
-      navigate("/");
+      setShowSplash(true); // 👈 Trigger splash
+      setTimeout(() => {
+        navigate("/");
+      }, 1500); // Adjust splash duration here (ms)
     } catch (err) {
       setError(err.response?.data?.msg || "Login failed");
-    } finally {
       setLoading(false);
     }
   };
+
+  if (showSplash) return <LoadingScreen />;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">
@@ -40,7 +47,6 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-
           <input
             type="password"
             name="password"
@@ -49,13 +55,11 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-200 p-2 rounded text-center">
               {error}
             </p>
           )}
-
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold shadow"
